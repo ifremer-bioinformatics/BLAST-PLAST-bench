@@ -67,11 +67,11 @@ Raw results (running times, CPU & memory use on 8, 16 ,32  and 56 cores) are as 
 
 Since we were interested in running, here are some graphical outputs (generated using material from sub-folder [gnuplot](gnuplot)):
 
-* [P-P: blastp](gnuplot/pp-time.png)
-* [P-PL: blastp](gnuplot/ppl-time.png)
-* [N-P: blastx](gnuplot/np-time.png)
-* [N-N: blastn and megablast](gnuplot/nn-time.png)
-* [M-N: focus on megablast](gnuplot/mn-time.png)
+* ![P-P: blastp](gnuplot/pp-time.png)
+* ![P-PL: blastp](gnuplot/ppl-time.png)
+* ![N-P: blastx](gnuplot/np-time.png)
+* ![N-N: blastn and megablast](gnuplot/nn-time.png)
+* ![M-N: focus on megablast](gnuplot/mn-time.png)
 
 Notes:
 
