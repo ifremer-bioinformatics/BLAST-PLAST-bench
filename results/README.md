@@ -32,6 +32,5 @@ For instance, using these identifiers, we identify a protein/protein comparison 
 Here are some details about the files we used:
 
 * queries: bacterium *Yersinia pestis* protein sequences (blastp and blastx) or gene sequences (blastn and megablast), i.e. 3979 sequences;
-* subject banks: one of Swissprot (555,594 sequences), Genbank Bacteria division (1,604,589 sequences) or TrEmbl (90,050,708 sequences); banks content as available on September 2017.
-* softwares: BLAST 2.2.31 & 2.6.0 and PLAST 2.3.2.
+* subject banks: Swissprot (555,594 sequences), Genbank Bacteria division (1,604,589 sequences) or TrEmbl (90,050,708 sequences); banks content as available on September 2017.
 
