@@ -65,6 +65,8 @@ Raw results (running times, CPU & memory use on 8, 16 ,32  and 56 cores) are as 
 * [BLAST 2.6.0](results/results-blast-2.6.0.tsv)
 * [PLAST 2.3.2](results/results-blast-2.3.2.tsv)
 
+Note: content of the above files is described [here](results/README.md)
+
 Since we were interested in running, here are some graphical outputs (generated using material from sub-folder [gnuplot](gnuplot)):
 
 * ![P-P: blastp](gnuplot/pp-time.png)
