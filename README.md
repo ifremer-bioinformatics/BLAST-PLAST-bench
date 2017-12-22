@@ -67,7 +67,11 @@ Raw results (running times, CPU & memory use on 8, 16 ,32  and 56 cores) are as 
 
 Note: content of the above files is described [here](results/README.md)
 
-Since we were interested in running, here are some graphical outputs (generated using material from sub-folder [gnuplot](gnuplot)):
+Since we were interested in running time, here are some graphical outputs (generated using material from sub-folder [gnuplot](gnuplot)):
+
+* y-axis: running time (seconds)
+* x-axis: nb cores
+* B2, B6 and P stands for BLAST 2.2.31, BLAST 2.6.0 and PLAST 2.3.2, respectively
 
 * ![P-P: blastp](gnuplot/pp-time.png)
 * ![P-PL: blastp](gnuplot/ppl-time.png)
@@ -75,7 +79,4 @@ Since we were interested in running, here are some graphical outputs (generated 
 * ![N-N: blastn and megablast](gnuplot/nn-time.png)
 * ![M-N: focus on megablast](gnuplot/mn-time.png)
 
-Notes:
-
-* unit for running time is 'seconds' on the above pictures;
-* N-N and M-N comparisons not done using PLAST since it is not optimal with regards to BLAST performance.
+Note: N-N and M-N comparisons not done using PLAST since it is not optimal with regards to BLAST performance.
