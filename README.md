@@ -35,7 +35,12 @@ Then, simply execute scripts by sequential order:
 
 ## Test case on IFREMER's DATARMOR supercomputer
 
+
+### Presentation
+
 We used scripts above presented to evaluate the optimal configuration (cores, RAM and walltime) to run sequence comparison jobs (aka BLAST) on the [DATARMOR](https://www.top500.org/system/178981) supercomputer available at IFREMER for bioinformatics computational intensive works.
+
+### Jobs configuration
 
 For that purpose, we ran jobs using the following constraints:
 
@@ -58,6 +63,8 @@ Same for subject banks:
 * M: Genbank Bacteria division (to be used to run megablast)
 
 For instance, using these identifiers, we identify a protein/protein comparison against SwissProt and TrEmbl with id "P-P" and "P-PL".
+
+### Results
 
 Raw results (running times, CPU & memory use on 8, 16 ,32  and 56 cores) are as follows:
 
