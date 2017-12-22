@@ -1,0 +1,5 @@
+CORES	B2-blastn	B2-megablast	B6-blastn	B6-megablast
+56	1226	49	1296	47
+32	2161	66	2397	53
+16	4394	77	3990	71
+8	9715	135	8712	126
