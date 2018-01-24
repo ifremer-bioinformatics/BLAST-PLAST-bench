@@ -87,3 +87,12 @@ Since we were interested in running time, here are some graphical outputs (gener
 * ![M-N: focus on megablast](gnuplot/mn-time.png)
 
 Note: N-N and M-N comparisons not done using PLAST since it is not optimal with regards to BLAST performance.
+
+Impact of RAM available on computing nodes: 32 Gb vs. 100 Gb.
+
+Here, we were interested to check whether or not BLAST running times change given the amount of RAM available on a computing node. We used two configurations: 32Gb vs. 100Gb (all other search parameters were the same over the various jobs).
+
+* ![All BLAST comparisons](gnuplot/mem-time.png)
+
+    * y-axis: log scale of running time (i.e. walltime); unit is seconds.
+    * x-axis: type of comparison; e.g. "P-P-56" = protein-protein comparison on 56 cores.
