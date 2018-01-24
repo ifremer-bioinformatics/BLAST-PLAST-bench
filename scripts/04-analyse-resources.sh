@@ -5,18 +5,19 @@ trap '[ "$?" -ne 77 ] || exit 77' ERR
 
 # ###
 #
-#  A script to alter jobs walltime. To be used AFTER run of script
+#  A script to get job information. To be used AFTER run of script
 #  02-submit-scripts.sh
 #
 #  Use:
 #
-#   ./03-alter-wtime.sh
+#   ./04-analyse-resources.sh
 #
 #  @author Patrick G. Durand, Ifremer, Nov 2017
 # 
 
 # File containing PBS job IDs (see 02-submit-scripts.sh)
 FILE="job-list.txt"
+# tmp working file
 STATFILE="stats.tmp"
 
 # --------
