@@ -1,0 +1,125 @@
+#!/usr/bin/env bash
+#PBS -q mpi
+#PBS -l select=@CHUNK@:ncpus=@CORE@:mpiprocs=@CORE@:mem=@MEM@gb
+#PBS -l walltime=@WTIME@:00:00
+
+WK_DIR=$DATAWORK/htc-blast/2.2.31
+mkdir -p $WK_DIR
+
+# Type of query: P(rotein) or N(ucleotide) or M(Nucleotide for Megablast)
+Q_TYPE=@QTYPE@
+case "$Q_TYPE" in
+  "P" ) 
+    QUERY=/home/ref-bioinfo/beedeem/p/Genbank_Yersinia_Angola_prot/current/Genbank_Yersinia_Angola_prot/Genbank_Yersinia_Angola_prot00
+    QUERY_LINK=Genbank_Yersinia_Angola.aa
+    QUERY_TYPE=aa
+    ;;
+  "N" | "M" ) 
+    QUERY=/home/ref-bioinfo/beedeem/n/Genbank_Yersinia_Angola_CDS/current/Genbank_Yersinia_Angola_CDS/Genbank_Yersinia_Angola_CDS00
+    QUERY_LINK=Genbank_Yersinia_Angola.nt
+    QUERY_TYPE=nt
+    ;;
+  *) 
+    echo "ERROR: unknown query type: $Q_TYPE"
+    exit 1
+    ;;
+esac
+
+#Create input symlink
+cd $WK_DIR
+if [ ! -L $QUERY_LINK ] ; then
+    ln -s $QUERY $QUERY_LINK
+fi
+
+# Type of subject: P or PS(Protein Small), PL (Protein Large), N or NS (Nucleotide Small) or NL (Nucleotide Large)
+S_TYPE=@STYPE@
+case "$S_TYPE" in
+  "P" | "PS") 
+    SUBJECT=/home/ref-bioinfo/beedeem/p/Uniprot_SwissProt/current/Uniprot_SwissProt/Uniprot_SwissProtM
+    SUBJECT_NAME=swiss
+    ;;  
+  "PL")
+    SUBJECT=/home/ref-bioinfo/beedeem/p/Uniprot_TrEMBL/current/Uniprot_TrEMBL/Uniprot_TrEMBLM
+    SUBJECT_NAME=trembl
+    ;;  
+  "N" | "NS") 
+    SUBJECT=/home/ref-bioinfo/beedeem/n/Genbank_Bacteria/current/Genbank_Bacteria/Genbank_BacteriaM
+    SUBJECT_NAME=gb_bact
+    ;; 
+  "NL")
+    SUBJECT=/home/ref-bioinfo/beedeem/n/NCBI_nt/current/NCBI_nt/NCBI_ntM
+    SUBJECT_NAME=nt
+    ;;  
+  *)  
+    echo "ERROR: unknown subject type: $S_TYPE"
+    exit 1
+    ;;  
+esac
+
+# BLAST output format
+#  5:XML ; 9: binary asn1 ; 6: tabular ; see: https://www.ncbi.nlm.nih.gov/books/NBK279684/ : Table C1
+#  we use ASN.1 since it can be used to generate other ones using blast_formatter tool
+FORMAT=9
+
+case "$FORMAT" in
+  "5" )
+    FORMAT_EXT="xml"
+    ;;
+  "6" )
+    FORMAT_EXT="tab"
+    ;;
+  "9" ) 
+    FORMAT_EXT="asn1"
+    ;;
+  *) 
+    FORMAT_EXT="out"
+    ;;
+esac
+
+# BLAST command to use
+BLAST_CMD="?"
+BLAST_VERSION="2.2.31"
+QT=${Q_TYPE:0:1}
+ST=${S_TYPE:0:1}
+if [ "$QT" == "P"  ] && [ "$ST" == "P"  ]; then
+  BLAST_CMD="blastp-$BLAST_VERSION"
+  BLAST_CMD_NAME="blastp"
+elif [ "$QT" == "N"  ] && [ "$ST" == "P"  ]; then
+  BLAST_CMD="blastx-$BLAST_VERSION"
+  BLAST_CMD_NAME="blastx"
+elif [ "$QT" == "M"  ] && [ "$ST" == "N"  ]; then
+  # Megablast
+  BLAST_CMD="blastn-$BLAST_VERSION"
+  BLAST_CMD_NAME="blastn"
+elif [ "$QT" == "N"  ] && [ "$ST" == "N"  ]; then
+  # blastn
+  BLAST_CMD="blastn-$BLAST_VERSION -task blastn"
+  BLAST_CMD_NAME="megablast"
+fi
+
+# Output file name
+OUTFDIR=$WK_DIR/${Q_TYPE}-${S_TYPE}-@MEM@gb-@FCORE@c
+TIMEFNAME=${OUTFDIR}/time.txt
+#OUTFNAME=${OUTFDIR}/blast.${FORMAT_EXT}
+
+# Prepare a TIME specific format string
+export TIME="U=%U;S=%S;E=%E;P=%P;M=%M;K=%K;F=%F;W=%W;I=%I;O=%O"
+
+# Load htc-BLAST environment
+APPLI=/appli/bioinfo/htc-blast/4.3
+export PATH=$PATH:$APPLI/bin
+export _DSM_OFF=OFF
+export MPC_GANG=OFF
+export OMP_DYNAMIC=FALSE
+export LD_LIBRARY_PATH=$APPLI/intel-compilers
+
+# Prepare BLAST command
+mkdir -p $OUTFDIR
+cd $WK_DIR
+CMD="/usr/bin/time -o $TIMEFNAME --format='$TIME' HTC_Bio -in_dir . -out_dir $OUTFDIR -in_type $QUERY_TYPE -ncpu @FCORE@ -verbose -collate -block -exec $BLAST_CMD -db $SUBJECT -outfmt $FORMAT -max_target_seqs 1 -evalue 1e-3"
+
+# dump cmd to be executed in PDB log for this job
+echo $CMD
+# eventually, run BLAST!
+eval $CMD >& $OUTFDIR/log 2>&1
+

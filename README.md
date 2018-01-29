@@ -1,8 +1,12 @@
 ## Benchmarks of BLAST and PLAST
 
-This project provides a script framework originally used to run benchmarks of [BLAST](https://blast.ncbi.nlm.nih.gov/Blast.cgi?CMD=Web&PAGE_TYPE=BlastDocs) and [PLAST](https://plast.inria.fr) on a supercomputer infrastructure.
+This project provides a script framework originally used to run benchmarks of [BLAST](https://blast.ncbi.nlm.nih.gov/Blast.cgi?CMD=Web&PAGE_TYPE=BlastDocs) and [PLAST](https://plast.inria.fr) on a cluster infrastructure.
 
 Provided scripts were originally designed to run comparison softwares on [IFREMER](www.ifremer.fr)'s [DATARMOR](https://www.top500.org/system/178981) computer providing the PBS job scheduler system. However, it would be easy to adapt theses scripts to run with other kind of job schedulers.
+
+## Benchmarks basics
+
+The basic principle of this benchmark was quite easy: find an optimal way to configure NCBI [BLAST](https://blast.ncbi.nlm.nih.gov/Blast.cgi?CMD=Web&PAGE_TYPE=BlastDocs) and INRIA [PLAST](https://plast.inria.fr) sequence comparison tools to run them as efficiently as possible on a cluster computer. Tests were conducted by running bank-to-bank sequence comparisons of reasonnable sizes.
 
 ## Requirements
 
@@ -19,7 +23,7 @@ In addition, you need some data sets to run sequence comparisons:
 
 It is up to you to install all that material.
 
-## Use
+## Use - regular
 
 First of all, you will have to edit scripts to meet YOUR requirements:
 
@@ -34,7 +38,6 @@ Then, simply execute scripts by sequential order:
 * finally, run [04-analyse-resources.sh](scripts/04-analyse-resources.sh): compiles usefull data from jobs stats; for instance, this is the script used to generate content of sub-folder [results](results)
 
 ## Test case on IFREMER's DATARMOR supercomputer
-
 
 ### Presentation
 
@@ -96,3 +99,26 @@ Here, we were interested to check whether or not BLAST running times change give
 
     * y-axis: log scale of running time (i.e. walltime); unit is seconds.
     * x-axis: type of comparison; e.g. "P-P-56" = protein-protein comparison on 56 cores.
+
+## Use - HTC-BLAST
+
+In this section, we describe the use of [HTC-BLAST 4.3](http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.194.2320&rep=rep1&type=pdf) framework to dispatch BLAST jobs.
+
+For these tests, we dispatched BLAST jobs on 1, 2, 3, etc. 28-core nodes on  [DATARMOR](https://www.top500.org/system/178981)'s machine.
+
+For that purpose, we setup a dedicated script (in addition ot the ones above presented):
+
+* [01-generate-htc-scripts.sh](scripts/01-generate-htc-scripts.sh): takes "htc_blast_template.txt" and generate as many job submission scripts as PBS constraints (cores and comparison types)
+
+We used the same data sets (i.e. query and subject banks) as for BLAST/PLAST tests, above presented.
+
+On the following plots:
+
+* y-axis: running time (i.e. walltime); unit is seconds
+* x-axis: nomber of cores
+* since we used the same data sets as above, we can appreciate the advantages of HTC-BLAST over regular BLAST to accelerate sequence comparisons.
+
+* ![P-P: blastp](gnuplot/htc-pp-time.png)
+* ![N-P: blastx](gnuplot/htc-np-time.png)
+* ![N-N: blastn](gnuplot/htc-nn-time.png)
+* ![M-N: focus on megablast](gnuplot/htc-mn-time.png)
