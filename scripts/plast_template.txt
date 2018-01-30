@@ -1,0 +1,96 @@
+#!/usr/bin/env bash
+#PBS -q omp
+#PBS -l mem=@MEM@gb
+#PBS -l ncpus=@CORE@
+#PBS -l walltime=@WTIME@:00:00
+
+WK_DIR=$DATAWORK/plast-s001
+
+# Type of query: P(rotein) or N(ucleotide)
+Q_TYPE=@QTYPE@
+case "$Q_TYPE" in
+  "P" ) 
+    QUERY=/home/ref-bioinfo/beedeem/p/Genbank_Yersinia_Angola_prot/current/Genbank_Yersinia_Angola_prot/Genbank_Yersinia_Angola_prot00
+    ;;
+  "N" ) 
+    QUERY=/home/ref-bioinfo/beedeem/n/Genbank_Yersinia_Angola_CDS/current/Genbank_Yersinia_Angola_CDS/Genbank_Yersinia_Angola_CDS00
+    ;;
+  *) 
+    echo "ERROR: unknown query type: $Q_TYPE"
+    exit 1
+    ;;
+esac
+
+# Type of subject: P or PS(Protein Small), PL (Protein Large), N or NS (Nucleotide Small) or NL (Nucleotide Large)
+S_TYPE=@STYPE@
+case "$S_TYPE" in
+  "P" | "PS") 
+    SUBJECT=/home/ref-bioinfo/beedeem/p/Uniprot_SwissProt/current/Uniprot_SwissProt/Uniprot_SwissProtM.pal
+    SUBJECT_NAME=swiss
+    ;;  
+  "PL")
+    SUBJECT=/home/ref-bioinfo/beedeem/p/Uniprot_TrEMBL/current/Uniprot_TrEMBL/Uniprot_TrEMBLM.pal
+    SUBJECT_NAME=trembl
+    ;;  
+  "N" | "NS") 
+    SUBJECT=/home/ref-bioinfo/beedeem/n/Genbank_Bacteria/current/Genbank_Bacteria/Genbank_BacteriaM.nal
+    SUBJECT_NAME=gb_bact
+    ;; 
+  "NL")
+    SUBJECT=/home/ref-bioinfo/beedeem/n/NCBI_nt/current/NCBI_nt/NCBI_ntM.nal
+    SUBJECT_NAME=nt
+    ;;  
+  *)  
+    echo "ERROR: unknown subject type: $S_TYPE"
+    exit 1
+    ;;  
+esac
+
+# PLAST output format
+#  1:tabular ; 2: extended tabular ; 4: Blast-like TXT
+FORMAT=1
+
+case "$FORMAT" in
+  "1" )
+    FORMAT_EXT="tab"
+    ;;
+  "2" )
+    FORMAT_EXT="etab"
+    ;;
+  "4" ) 
+    FORMAT_EXT="txt"
+    ;;
+esac
+
+# PLAST command to use
+BLAST_CMD="?"
+QT=${Q_TYPE:0:1}
+ST=${S_TYPE:0:1}
+if [ "$QT" == "P"  ] && [ "$ST" == "P"  ]; then
+  BLAST_CMD="plast -p plastp"
+  BLAST_CMD_NAME="plastp"
+elif [ "$QT" == "N"  ] && [ "$ST" == "P"  ]; then
+  BLAST_CMD="plast -p plastx"
+  BLAST_CMD_NAME="plastx"
+fi
+
+# Output file name
+mkdir -p $WK_DIR
+OUTFNAME=$WK_DIR/${Q_TYPE}-${S_TYPE}-@MEM@gb-@CORE@c
+TIMEFNAME=${OUTFNAME}.time
+OUTFNAME=${OUTFNAME}.${FORMAT_EXT}
+
+# Prepare a TIME specific format string
+export TIME="U=%U;S=%S;E=%E;P=%P;M=%M;K=%K;F=%F;W=%W;I=%I;O=%O"
+
+# Load BLAST environment
+export PATH=$PATH:/appli/bioinfo/plast/2.3.2
+
+# Prepare PLAST command
+CMD="/usr/bin/time -o $TIMEFNAME --format='$TIME' $BLAST_CMD -i $QUERY -d $SUBJECT -o $OUTFNAME -outfmt $FORMAT -max-hit-per-query 1 -max-hsp-per-hit 1 -e 1e-3 -a @CORE@ -seeds-use-ratio 0.01"
+# dump cmd to be executed in PBS log for this job
+echo $CMD
+
+# eventually, run PLAST!
+eval $CMD
+
