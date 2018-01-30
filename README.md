@@ -127,7 +127,7 @@ Since we used the same data sets as above, we can appreciate (or not) the advant
 
 Regular NCBI BLAST software provides a [remote](https://www.ncbi.nlm.nih.gov/books/NBK279668/#usermanual.BLAST_remote_service) feature that enables a user to run a BLAST job using NCBI computational infrastructure.
 
-To check whether or not it could be of interest to either use NCBI or local IT resources, we conducted a single test (NCBI being a public shared resource, we did not run many tests).
+To check whether or not it could be of interest to use NCBI or local IT resources, we conducted a single test (NCBI being a public shared resource, we did not run many tests).
 
 Our test was as simple as using NCBI's [web_blast.pl](https://blast.ncbi.nlm.nih.gov/docs/web_blast.pl) script to run our "P-P" comparison (see previous sections):
 
