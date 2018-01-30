@@ -2,7 +2,7 @@
 
 This project provides a script framework originally used to run benchmarks of [BLAST](https://blast.ncbi.nlm.nih.gov/Blast.cgi?CMD=Web&PAGE_TYPE=BlastDocs) and [PLAST](https://plast.inria.fr) on a cluster infrastructure.
 
-Provided scripts were originally designed to run comparison softwares on [IFREMER](www.ifremer.fr)'s [DATARMOR](https://www.top500.org/system/178981) computer providing the PBS job scheduler system. However, it would be easy to adapt theses scripts with any other kind of job schedulers.
+Provided scripts were originally designed to run comparison softwares on [IFREMER](http://www.ifremer.fr)'s [DATARMOR](https://www.top500.org/system/178981) computer providing the PBS job scheduler system. However, it would be easy to adapt theses scripts with any other kind of job schedulers.
 
 ## Benchmarks basics
 
@@ -38,6 +38,8 @@ For that purpose, we ran jobs using the following constraints:
 * queries: bacterium *Yersinia pestis* protein sequences (blastp and blastx) or gene sequences (blastn and megablast), i.e. 3979 sequences;
 * subject banks: one of Swissprot (555,594 sequences), Genbank Bacteria division (1,604,589 sequences) or TrEmbl (90,050,708 sequences); banks content as available on September 2017.
 * softwares: BLAST 2.2.31 & 2.6.0 and PLAST 2.3.2.
+* BLAST cmd-line specific parameters: -max_target_seqs 1 -evalue 1e-3 -outfmt 9 (you can review the full BLAST cmd-line [here](scripts/blast_template.txt); see end of script)
+* PLAST cmd-line specific parameters: -max-hit-per-query 1 -max-hsp-per-hit 1 -e 1e-3 -outfmt 1 -seeds-use-ratio 0.01 (you can review the full PLAST cmd-line [here](scripts/plast_template.txt); see end of script)
 
 Below, we use the following identifiers to target each kind of queries:
 
@@ -51,9 +53,16 @@ Same for subject banks:
 * N: Genbank Bacteria division (to be used to run blastn)
 * M: Genbank Bacteria division (to be used to run megablast)
 
-For instance, using these identifiers, we identify a protein/protein comparison against SwissProt and TrEmbl with id "P-P" and "P-PL", respectively.
+Using these query and subject naming codes, we introduce the following jobs names:
 
-### Results
+* **P-P**: a protein-protein comparison of bacterium *Yersinia pestis* protein sequences against SwissProt
+* **P-PL**: a protein-protein comparison of bacterium *Yersinia pestis* protein sequences against TrEmbl
+* **N-N**: a nucleotide-nucleotide (regular BLASTn) comparison of bacterium *Yersinia pestis* gene sequences against Genbank Bacteria division
+* **M-N**: a nucleotide-nucleotide (**M** egablast) comparison of bacterium *Yersinia pestis* gene sequences against Genbank Bacteria division
+* **N-P**: a nucleotide-protein comparison of bacterium *Yersinia pestis* gene sequences against SwissProt
+* **N-PL**: a nucleotide-protein comparison of bacterium *Yersinia pestis* gene sequences against TrEMBL
+
+### Results: running time
 
 Raw results (running times, CPU & memory use on 8, 16 ,32  and 56 cores) are as follows:
 
@@ -77,7 +86,7 @@ Since we were interested in running times, here are some graphical outputs (gene
 
 Note: N-N and M-N comparisons not done using PLAST since it is not optimal with regards to BLAST performance.
 
-Impact of RAM available on computing nodes: 32 Gb vs. 100 Gb.
+### Results: Impact of RAM available on computing nodes
 
 Here, we were interested to check whether or not BLAST running times change given the amount of RAM available on a computing node. We used two configurations: 32Gb vs. 100Gb (all other search parameters were the same over the various jobs).
 
@@ -91,11 +100,7 @@ Here, we were interested to check whether or not BLAST running times change give
 
 In this section, we describe the use of [HTC-BLAST 4.3](http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.194.2320&rep=rep1&type=pdf) framework to dispatch BLAST jobs.
 
-For these tests, we dispatched BLAST jobs on 1, 2, 3, etc. 28-core nodes on  [DATARMOR](https://www.top500.org/system/178981)'s machine.
-
-For that purpose, we setup a dedicated script (in addition ot the ones above presented):
-
-* [01-generate-htc-scripts.sh](scripts/01-generate-htc-scripts.sh): takes "htc_blast_template.txt" and generate as many job submission scripts as PBS constraints (cores and comparison types)
+For these tests, we dispatched BLAST jobs on one up to five 28-core nodes on  [DATARMOR](https://www.top500.org/system/178981)'s machine.
 
 We used the same data sets (i.e. query and subject banks) as for BLAST/PLAST tests, above presented.
 
