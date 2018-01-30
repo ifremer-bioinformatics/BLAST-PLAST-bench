@@ -4,8 +4,11 @@
 #PBS -l ncpus=@CORE@
 #PBS -l walltime=@WTIME@:00:00
 
+# which version of BLAST do we have to use?
+BLAST_VER="2.2.31"
+
 # where do we have to create result files?
-WK_DIR=$DATAWORK/blast/2.2.31
+WK_DIR=$DATAWORK/blast/${BLAST_VER}
 
 # Type of query: P(rotein) or N(ucleotide) or M(Nucleotide for Megablast)
 # Queries below target FASTA formatted sequence files
@@ -97,8 +100,8 @@ OUTFNAME=${OUTFNAME}.${FORMAT_EXT}
 # Prepare a TIME specific format string
 export TIME="U=%U;S=%S;E=%E;P=%P;M=%M;K=%K;F=%F;W=%W;I=%I;O=%O"
 
-# Load BLAST environment
-. /appli/bioinfo/blast/2.2.31/env.sh
+# Load BLAST Conda environment
+. /appli/bioinfo/blast/${BLAST_VER}/env.sh
 
 # Prepare BLAST command
 CMD="/usr/bin/time -o $TIMEFNAME --format='$TIME' $BLAST_CMD -query $QUERY -db $SUBJECT -out $OUTFNAME -outfmt $FORMAT -max_target_seqs 1 -evalue 1e-3 -num_threads @CORE@"
