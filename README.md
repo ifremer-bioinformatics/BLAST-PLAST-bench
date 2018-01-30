@@ -2,7 +2,7 @@
 
 This project provides a script framework originally used to run benchmarks of [BLAST](https://blast.ncbi.nlm.nih.gov/Blast.cgi?CMD=Web&PAGE_TYPE=BlastDocs) and [PLAST](https://plast.inria.fr) on a cluster infrastructure.
 
-Provided scripts were originally designed to run comparison softwares on [IFREMER](http://www.ifremer.fr)'s [DATARMOR](https://www.top500.org/system/178981) computer providing the PBS job scheduler system. However, it would be easy to adapt theses scripts with any other kind of job schedulers.
+Provided scripts were originally designed to run comparison softwares on [IFREMER](http://wwz.ifremer.fr/en/The-Institute)'s [DATARMOR](https://www.top500.org/system/178981) computer providing the PBS job scheduler system. However, it would be easy to adapt theses scripts with any other kind of job schedulers.
 
 ## Benchmarks basics
 
