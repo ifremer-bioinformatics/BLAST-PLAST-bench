@@ -69,11 +69,11 @@ Since we were interested in running times, here are some graphical outputs (gene
 * x-axis: nb cores
 * B2, B6 and P stands for BLAST 2.2.31, BLAST 2.6.0 and PLAST 2.3.2, respectively
 
-* ![P-P: blastp](gnuplot/pp-time.png)
-* ![P-PL: blastp](gnuplot/ppl-time.png)
-* ![N-P: blastx](gnuplot/np-time.png)
-* ![N-N: blastn and megablast](gnuplot/nn-time.png)
-* ![M-N: focus on megablast](gnuplot/mn-time.png)
+* **BLASTp/PLASTp medium jobs** ([data table is here](gnuplot/pp-time.dat)): ![P-P: blastp](gnuplot/pp-time.png)
+* **BLASTp/PLASTp large jobs** ([data table is here](gnuplot/ppl-time.dat)): ![P-PL: blastp](gnuplot/ppl-time.png)
+* **BLASTx/PLASTx jobs** ([data table is here](gnuplot/np-time.dat)): ![N-P: blastx](gnuplot/np-time.png)
+* **BLASTn jobs** ([data table is here](gnuplot/nn-time.dat)): ![N-N: blastn and megablast](gnuplot/nn-time.png)
+* **Megablast jobs** ([data table is here](gnuplot/mn-time.dat)): ![M-N: focus on megablast](gnuplot/mn-time.png)
 
 Note: N-N and M-N comparisons not done using PLAST since it is not optimal with regards to BLAST performance.
 
@@ -85,6 +85,7 @@ Here, we were interested to check whether or not BLAST running times change give
 
     * y-axis: log scale of running time (i.e. walltime); unit is seconds.
     * x-axis: type of comparison; e.g. "P-P-56" = protein-protein comparison on 56 cores.
+    * data table [is here](gnuplot/mem-time.dat)
 
 ## Same test case with HTC-BLAST
 
@@ -101,10 +102,18 @@ We used the same data sets (i.e. query and subject banks) as for BLAST/PLAST tes
 On the following plots:
 
 * y-axis: running time (i.e. walltime); unit is seconds
-* x-axis: nomber of cores
-* since we used the same data sets as above, we can appreciate (or not) the advantages of HTC-BLAST over regular BLAST to accelerate (or not) sequence comparisons.
+* x-axis: number of cores (28: one 28-core computing node; 56: two 28-core computing nodes; 84: three 28-core computing nodes; and so on...)
 
-* ![P-P: blastp](gnuplot/htc-pp-time.png)
-* ![N-P: blastx](gnuplot/htc-np-time.png)
-* ![N-N: blastn](gnuplot/htc-nn-time.png)
-* ![M-N: focus on megablast](gnuplot/htc-mn-time.png)
+* **HTC-BLASTp jobs** ([data table is here](gnuplot/htc-pp-time.dat)): ![P-P: blastp](gnuplot/htc-pp-time.png)
+* **HTC-BLASTx jobs** ([data table is here](gnuplot/htc-np-time.dat)): ![N-P: blastx](gnuplot/htc-np-time.png)
+* **HTC-BLASTn jobs** ([data table is here](gnuplot/htc-nn-time.dat)): ![N-N: blastn](gnuplot/htc-nn-time.png)
+* **HTC-Megablast jobs** ([data table is here](gnuplot/htc-mn-time.dat)): ![M-N: focus on megablast](gnuplot/htc-mn-time.png)
+
+Since we used the same data sets as above, we can appreciate (or not) the advantages of HTC-BLAST over regular BLAST to accelerate (or not) sequence comparisons. In the following table, we compare jiob running times (i.e. "walltime") of HTC vs Regular BLAST on 56 cores (unit is seconds):
+
+| Job kind | Regular BLAST | HTC-BLAST |
+|----------|---------------|-----------|
+| P-P      |    338 s      |    251 s  |
+| N-P      |    647 s      |    517 s  |
+| N-N      |   1226 s      |   1985 s  |
+| M-N      |     49 s      |    286 s  |
