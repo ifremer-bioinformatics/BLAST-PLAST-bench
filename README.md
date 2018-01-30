@@ -96,7 +96,7 @@ Here, we were interested to check whether or not BLAST running times change give
     * x-axis: type of comparison; e.g. "P-P-56" = protein-protein comparison on 56 cores.
     * data table [is here](gnuplot/mem-time.dat)
 
-## Same test cases using HTC-BLAST
+## Test cases using HTC-BLAST
 
 In this section, we describe the use of [HTC-BLAST 4.3](http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.194.2320&rep=rep1&type=pdf) framework to dispatch BLAST jobs.
 
@@ -122,3 +122,22 @@ Since we used the same data sets as above, we can appreciate (or not) the advant
 | N-P      |    647 s      |    517 s  |
 | N-N      |   1226 s      |   1985 s  |
 | M-N      |     49 s      |    286 s  |
+
+## A test case using Remote-BLAST
+
+Regular NCBI BLAST software provides a [remote](https://www.ncbi.nlm.nih.gov/books/NBK279668/#usermanual.BLAST_remote_service) feature that enables a user to run a BLAST job using NCBI computational infrastructure.
+
+To check whether or not it could be of interest to either use NCBI or local IT resources, we conducted a single test (NCBI being a public shared resource, we did not run many tests).
+
+Our test was as simple as using NCBI's [web_blast.pl](https://blast.ncbi.nlm.nih.gov/docs/web_blast.pl) script to run our "P-P" comparison (see previous sections):
+
+    time ./web_blast.pl blastp swissprot Genbank_Yersinia_Angola_prot00
+    RID is: 58VWKSPB015
+    Search complete, retrieving results...
+    done.
+
+    real 184m32,700s
+    user 0m35,217s
+    sys 0m1,444s
+
+As one can see, such a job has taken 184 minutes at NCBI (data transfer + comparison) instead of less than 5 minutes on a 56-core DATARMOR's computing node (see above P-P plots for runtimes on 8, 16 and 32 cores).
