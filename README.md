@@ -6,7 +6,7 @@ Provided scripts were originally designed to run comparison softwares on [IFREME
 
 ## Benchmarks basics
 
-The basic principle of this benchmark was quite easy: find an optimal way to configure NCBI [BLAST](https://blast.ncbi.nlm.nih.gov/Blast.cgi?CMD=Web&PAGE_TYPE=BlastDocs) and INRIA [PLAST](https://plast.inria.fr) sequence comparison tools to run them as efficiently as possible on a cluster computer. Tests were conducted by running bank-to-bank sequence comparisons of reasonnable sizes.
+The basic principle of this benchmark was quite easy: find an optimal way to configure NCBI [BLAST](https://blast.ncbi.nlm.nih.gov/Blast.cgi?CMD=Web&PAGE_TYPE=BlastDocs) and INRIA [PLAST](https://plast.inria.fr) sequence comparison tools in order to run them as efficiently as possible on a cluster computer. Tests were conducted by running bank-to-bank sequence comparisons of reasonnable sizes.
 
 ## Requirements
 
@@ -68,14 +68,14 @@ Raw results (running times, CPU & memory use on 8, 16 ,32  and 56 cores) are as 
 
 * [BLAST 2.2.31](results/results-blast-2.2.31.tsv)
 * [BLAST 2.6.0](results/results-blast-2.6.0.tsv)
-* [PLAST 2.3.2](results/results-blast-2.3.2.tsv)
+* [PLAST 2.3.2](results/results-plast-2.3.2.tsv)
 
 Note: content of the above files is described [here](results/README.md)
 
 Since we were interested in running times, here are some graphical outputs (generated using material from sub-folder [gnuplot](gnuplot)):
 
 * y-axis: running time (seconds)
-* x-axis: nb cores
+* x-axis: number of cores
 * B2, B6 and P stands for BLAST 2.2.31, BLAST 2.6.0 and PLAST 2.3.2, respectively
 
 * **BLASTp/PLASTp medium jobs** ([data table is here](gnuplot/pp-time.dat)): ![P-P: blastp](gnuplot/pp-time.png)
@@ -96,7 +96,7 @@ Here, we were interested to check whether or not BLAST running times change give
     * x-axis: type of comparison; e.g. "P-P-56" = protein-protein comparison on 56 cores.
     * data table [is here](gnuplot/mem-time.dat)
 
-## Same test case with HTC-BLAST
+## Same test cases using HTC-BLAST
 
 In this section, we describe the use of [HTC-BLAST 4.3](http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.194.2320&rep=rep1&type=pdf) framework to dispatch BLAST jobs.
 
@@ -114,7 +114,7 @@ On the following plots:
 * **HTC-BLASTn jobs** ([data table is here](gnuplot/htc-nn-time.dat)): ![N-N: blastn](gnuplot/htc-nn-time.png)
 * **HTC-Megablast jobs** ([data table is here](gnuplot/htc-mn-time.dat)): ![M-N: focus on megablast](gnuplot/htc-mn-time.png)
 
-Since we used the same data sets as above, we can appreciate (or not) the advantages of HTC-BLAST over regular BLAST to accelerate (or not) sequence comparisons. In the following table, we compare jiob running times (i.e. "walltime") of HTC vs Regular BLAST on 56 cores (unit is seconds):
+Since we used the same data sets as above, we can appreciate (or not) the advantages of HTC-BLAST over regular BLAST to accelerate (or not) sequence comparisons. In the following table, we compare job running times (i.e. "walltime") of HTC vs Regular BLAST on 56 cores:
 
 | Job kind | Regular BLAST | HTC-BLAST |
 |----------|---------------|-----------|
