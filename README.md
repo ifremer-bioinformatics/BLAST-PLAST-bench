@@ -140,4 +140,4 @@ Our test was as simple as using NCBI's [web_blast.pl](https://blast.ncbi.nlm.nih
     user 0m35,217s
     sys 0m1,444s
 
-As one can see, such a job has taken 184 minutes at NCBI (data transfer + comparison) instead of less than 5 minutes on a 56-core DATARMOR's computing node (see above P-P plots for runtimes on 8, 16 and 32 cores).
+As one can see, such a job has taken 184 minutes at NCBI (data transfer + comparison) instead of less than 5 minutes on a 56-core DATARMOR's computing node (check out [this table](results/results-blast-2.6.0.tsv) for "P-P" runtimes on 8, 16 and 32 cores).
